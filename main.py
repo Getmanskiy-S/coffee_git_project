@@ -1,16 +1,18 @@
+import os
 import sys
 import sqlite3
-from PyQt6 import uic
 from PyQt6.QtWidgets import (QApplication, QMainWindow, QTableWidgetItem,
                              QDialog, QMessageBox)
+from addEditCoffeeForm import Ui_CoffeeEditDialog
+from basic import Ui_MainWindow
 
 
-class CoffeeEditDialog(QDialog):
+class CoffeeEditDialog(QDialog, Ui_CoffeeEditDialog):
     def __init__(self, parent=None, coffee_id=None):
         super().__init__(parent)
-        uic.loadUi('addEditCoffeeForm.ui', self)
+        self.setupUi(self)
         self.coffee_id = coffee_id
-        self.con = sqlite3.connect("coffee.sqlite")
+        self.con = sqlite3.connect("../data/coffee.sqlite")
         self.cursor = self.con.cursor()
 
         if self.coffee_id is not None:
@@ -79,11 +81,11 @@ class CoffeeEditDialog(QDialog):
         QDialog.reject(self)
 
 
-class MyWidget(QMainWindow):
+class MyWidget(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi('main.ui', self)
-        self.con = sqlite3.connect("coffee.sqlite")
+        self.setupUi(self)
+        self.con = sqlite3.connect("../data/coffee.sqlite")
         self.pushButton.clicked.connect(self.update_result)
         self.addButton.clicked.connect(self.add_coffee)
         self.editButton.clicked.connect(self.edit_coffee)
